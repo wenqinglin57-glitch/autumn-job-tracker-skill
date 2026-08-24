@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "求职工作台",
+  "version": "0.31.0",
+  "description": "按需整理秋招投递和招聘邮件，并按自定义时间复查申请进度。",
+  "permissions": [
+    "storage",
+    "alarms",
+    "tabs",
+    "webNavigation",
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://*/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "求职工作台",
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "icons": {
+    "128": "icon.png"
+  },
+  "options_page": "index.html",
+  "content_scripts": [
+    {
+      "matches": ["https://*/*"],
+      "js": ["extractor.js", "content.js"],
+      "all_frames": true,
+      "run_at": "document_idle"
+    }
+  ]
+}

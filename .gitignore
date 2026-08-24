@@ -1,0 +1,20 @@
+# Local packages and transient files
+*.zip
+*.crx
+*.pem
+*.log
+.env
+.env.*
+
+# Browser/runtime data must never enter the skill repository
+profile/
+storage/
+cookies*.json
+credentials*.json
+records*.json
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

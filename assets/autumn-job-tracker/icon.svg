@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <rect width="128" height="128" rx="30" fill="#172019"/>
+  <rect x="18" y="18" width="92" height="92" rx="24" fill="#294232" stroke="#6f8e79" stroke-width="2"/>
+  <text x="64" y="82" text-anchor="middle" font-size="54" font-family="serif" fill="#e7f0e9">秋</text>
+</svg>

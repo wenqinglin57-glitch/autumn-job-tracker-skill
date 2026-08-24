@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#172019" />
+    <meta
+      name="description"
+      content="一个适合手机和电脑使用的秋招投递进度管理面板。"
+    />
+    <title>求职工作台</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="主导航">
+        <a class="brand" href="#" aria-label="求职工作台首页">
+          <span class="brand-mark" aria-hidden="true">职</span>
+          <span>
+            <strong>求职工作台</strong>
+            <small>JOB SEARCH HUB</small>
+          </span>
+        </a>
+
+        <nav class="side-nav">
+          <a class="nav-item active" href="#applications">
+            <span aria-hidden="true">🗂️</span>投递看板
+          </a>
+          <button class="nav-item" id="navDevices" type="button">
+            <span aria-hidden="true">🖥️</span>设备管理
+          </button>
+          <button class="nav-item" id="navSettings" type="button">
+            <span aria-hidden="true">⚙️</span>个人与邮箱
+          </button>
+        </nav>
+
+        <button class="mascot-card" id="mascotButton" type="button" aria-label="打开小狗通知详情">
+          <span class="mascot-alert-badge" id="mascotAlertBadge" hidden>!</span>
+          <span class="mascot-image-wrap">
+            <img id="mascotImage" src="./assets/dog-working.png" alt="毛绒斑点小狗助手" />
+          </span>
+          <span class="mascot-copy">
+            <strong id="mascotTitle">小狗在工作</strong>
+            <small id="mascotSpeech">嗨中午好，小狗要工作啦</small>
+            <em>点击查看通知详情</em>
+          </span>
+        </button>
+
+        <div class="security-card">
+          <span class="security-icon" aria-hidden="true">✓</span>
+          <div>
+            <strong id="securityTitle">本机数据保护</strong>
+            <p id="securityText">当前原型的数据仅保存在这台设备的浏览器中。</p>
+          </div>
+        </div>
+
+        <div class="profile">
+          <span class="avatar">ME</span>
+          <span>
+            <strong id="profileDisplayName">我的秋招</strong>
+            <small id="profileDisplayMeta">当前设备</small>
+          </span>
+          <span class="online-dot" title="设备在线"></span>
+        </div>
+      </aside>
+
+      <main class="main" id="applications">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">你的求职节奏</p>
+            <h1>求职工作台</h1>
+            <p class="subtitle">把每一次投递、关键截止时间和下一步安排放在同一个地方。</p>
+          </div>
+          <div class="topbar-actions">
+            <span class="device-pill"><span></span><b id="deviceStatusText">本设备已受信任</b></span>
+            <button class="button refresh-button" id="refreshButton" type="button"><span aria-hidden="true">↻</span><b>立即刷新进度</b></button>
+            <button class="button secondary" id="exportButton" type="button">导出记录</button>
+            <button class="button primary" id="addButton" type="button">
+              <span aria-hidden="true">＋</span>新增投递
+            </button>
+          </div>
+        </header>
+
+        <section class="notice" id="localNotice" aria-label="版本提示">
+          <div class="notice-icon" aria-hidden="true">i</div>
+          <div>
+            <strong id="noticeTitle">这是可操作的本机原型</strong>
+            <p id="noticeText">新增和修改会保存在当前浏览器；云端加密同步及 Edge 自动查询将在下一阶段接入。</p>
+          </div>
+          <button class="icon-button" id="closeNotice" type="button" aria-label="关闭提示">×</button>
+        </section>
+
+        <section class="automation-settings" aria-labelledby="scheduleTitle">
+          <div>
+            <p class="eyebrow">自动检查</p>
+            <h2 id="scheduleTitle">每日抓取时间</h2>
+            <p id="scheduleSummary">默认每天 12:00、18:00 检查招聘网站和已登记邮箱。</p>
+          </div>
+          <div class="schedule-editor">
+            <div class="schedule-times" id="scheduleTimes"></div>
+            <button class="schedule-add" id="addScheduleTime" type="button">＋ 添加时间</button>
+            <button class="button primary" id="saveScheduleButton" type="button">保存时间</button>
+          </div>
+        </section>
+
+        <section class="stats" aria-label="投递统计">
+          <article class="stat-card accent-green">
+            <div class="stat-top"><span>全部投递</span><span class="stat-icon">📮</span></div>
+            <strong id="totalStat">0</strong>
+            <small id="weekStat">本周新增 0 份</small>
+          </article>
+          <article class="stat-card accent-blue">
+            <div class="stat-top"><span>进行中</span><span class="stat-icon">✨</span></div>
+            <strong id="activeStat">0</strong>
+            <small>等待反馈或下一轮</small>
+          </article>
+          <article class="stat-card accent-orange">
+            <div class="stat-top"><span>面试阶段</span><span class="stat-icon">🧩</span></div>
+            <strong id="interviewStat">0</strong>
+            <small>一面至 HR 面</small>
+          </article>
+          <article class="stat-card accent-purple">
+            <div class="stat-top"><span>Offer</span><span class="stat-icon">🎉</span></div>
+            <strong id="offerStat">0</strong>
+            <small id="offerRateStat">Offer 率 0%</small>
+          </article>
+        </section>
+
+        <section class="career-focus" aria-labelledby="careerFocusTitle">
+          <div class="career-focus-lead">
+            <span class="focus-kicker">今日优先</span>
+            <h2 id="careerFocusTitle">下一步行动</h2>
+            <p id="focusNextAction">添加一条投递记录，开始安排你的求职节奏。</p>
+          </div>
+          <div class="career-focus-items">
+            <article class="focus-item deadline-focus">
+              <span>最近截止</span>
+              <strong id="focusDeadline">暂未设置</strong>
+              <small id="focusDeadlineHint">补充测评或面试截止时间</small>
+            </article>
+            <article class="focus-item action-focus">
+              <span>待完成事项</span>
+              <strong id="focusTodoCount">0 项</strong>
+              <small id="focusTodoHint">测评、笔试与面试会显示在这里</small>
+            </article>
+            <a class="focus-link" href="#applications">查看全部投递 <span aria-hidden="true">→</span></a>
+          </div>
+        </section>
+
+        <section class="pending-mail-panel" id="pendingMailPanel" aria-labelledby="pendingMailTitle" hidden>
+          <div class="pending-mail-heading">
+            <div>
+              <p class="eyebrow">需要你确认</p>
+              <h2 id="pendingMailTitle">待确认邮件</h2>
+              <p>这些秋招邮件已经抓取，但暂时不能唯一对应到某一条投递记录。</p>
+            </div>
+            <span class="pending-mail-count" id="pendingMailCount">0 封</span>
+          </div>
+          <div class="pending-mail-list" id="pendingMailList"></div>
+        </section>
+
+        <section class="workspace">
+          <div class="workspace-heading">
+            <div>
+              <h2>投递记录</h2>
+              <p id="resultCount">共 0 条记录</p>
+            </div>
+            <div class="filters">
+              <label class="search-box">
+                <span aria-hidden="true">⌕</span>
+                <input id="searchInput" type="search" placeholder="搜索企业、岗位或地点" />
+              </label>
+              <label class="select-box">
+                <span class="sr-only">筛选进度</span>
+                <select id="progressFilter">
+                  <option value="">全部进度</option>
+                  <option>已投递</option>
+                  <option>简历筛选</option>
+                  <option>测评</option>
+                  <option>笔试</option>
+                  <option>一面</option>
+                  <option>二面</option>
+                  <option>HR面</option>
+                  <option>Offer</option>
+                  <option>未通过</option>
+                  <option>已撤回</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div class="demo-banner" id="demoBanner" hidden>
+            <span>当前显示的是示例记录，你可以编辑、删除或清空后录入自己的投递。</span>
+            <button id="clearDemoButton" type="button">清空示例</button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>岗位名称</th>
+                  <th>企业名字</th>
+                  <th>工作地点</th>
+                  <th>投递日期</th>
+                  <th>进度</th>
+                  <th>待办与截止时间</th>
+                  <th>查询网站</th>
+                  <th>登录状态</th>
+                  <th><span class="sr-only">操作</span></th>
+                </tr>
+              </thead>
+              <tbody id="recordsBody"></tbody>
+            </table>
+          </div>
+
+          <div class="mobile-records" id="mobileRecords"></div>
+
+          <div class="empty-state" id="emptyState" hidden>
+            <span aria-hidden="true">＋</span>
+            <h3>还没有投递记录</h3>
+            <p>新增第一份投递后，这里会帮你持续整理进度。</p>
+            <button class="button primary" id="emptyAddButton" type="button">新增投递</button>
+          </div>
+        </section>
+
+        <section class="workspace archived-workspace" id="archivedSection" aria-labelledby="archivedTitle">
+          <div class="workspace-heading">
+            <div>
+              <p class="eyebrow">流程已结束</p>
+              <h2 id="archivedTitle">已归档</h2>
+              <p id="archivedCount">共 0 条已结束记录</p>
+            </div>
+            <span class="archive-label">未通过记录仅提醒一次</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>岗位名称</th>
+                  <th>企业名字</th>
+                  <th>工作地点</th>
+                  <th>投递日期</th>
+                  <th>进度</th>
+                  <th>待办与截止时间</th>
+                  <th>查询网站</th>
+                  <th>登录状态</th>
+                  <th><span class="sr-only">操作</span></th>
+                </tr>
+              </thead>
+              <tbody id="archivedRecordsBody"></tbody>
+            </table>
+          </div>
+          <div class="mobile-records" id="archivedMobileRecords"></div>
+          <div class="archive-empty" id="archivedEmpty">还没有已归档记录</div>
+        </section>
+
+        <section class="workspace mail-workspace" id="mailHistorySection" aria-labelledby="mailHistoryTitle">
+          <div class="workspace-heading">
+            <div>
+              <h2 id="mailHistoryTitle">秋招邮件记录</h2>
+              <p id="mailHistoryCount">还没有抓取到秋招邮件</p>
+            </div>
+            <span class="mail-local-label">仅保存在当前设备</span>
+          </div>
+          <div class="mail-selection-toolbar" id="mailSelectionToolbar" hidden>
+            <label><input id="selectAllEmails" type="checkbox" /> 全选邮件</label>
+            <span id="selectedMailCount">已选择 0 封</span>
+            <button id="deleteSelectedEmails" type="button" disabled>删除所选</button>
+          </div>
+          <div class="table-wrap mail-table-wrap">
+            <table class="mail-history-table">
+              <thead>
+                <tr>
+                  <th>选择</th>
+                  <th>抓取时间</th>
+                  <th>邮箱来源</th>
+                  <th>邮箱位置</th>
+                  <th>匹配企业／岗位</th>
+                  <th>邮件标题</th>
+                  <th>识别结果</th>
+                  <th>截止时间</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="mailHistoryBody"></tbody>
+            </table>
+          </div>
+          <div class="mail-history-cards" id="mailHistoryCards"></div>
+          <div class="mail-empty" id="mailHistoryEmpty">
+            保存常用邮箱并保持网页版邮箱登录后，立即刷新和每日定时检查会自动查找秋招邮件。
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <nav class="bottom-nav" aria-label="移动端导航">
+      <a class="active" href="#applications"><span>▦</span>看板</a>
+      <button id="mobileAddButton" type="button"><span>＋</span>新增</button>
+      <button id="mobileRefreshButton" type="button"><span>↻</span>刷新</button>
+      <button id="mobileMascotButton" type="button"><span>🐶</span>通知</button>
+    </nav>
+
+    <dialog id="recordDialog" aria-labelledby="dialogTitle">
+      <form id="recordForm">
+        <div class="dialog-head">
+          <div>
+            <p class="eyebrow">投递信息</p>
+            <h2 id="dialogTitle">新增投递</h2>
+          </div>
+          <button class="icon-button" id="closeDialog" type="button" aria-label="关闭">×</button>
+        </div>
+
+        <p class="manual-entry-hint" id="recordManualHint" hidden>企业名字只能由你手动填写，网页抓取和刷新都不会自动修改。</p>
+
+        <input id="recordId" type="hidden" />
+        <div class="form-grid">
+          <label>
+            <span>岗位名称 <b>*</b></span>
+            <input id="jobTitle" name="jobTitle" required maxlength="80" placeholder="例如：产品经理" />
+          </label>
+          <label>
+            <span>企业名字 <b>*</b></span>
+            <input id="enterpriseName" name="enterpriseName" required maxlength="80" autocomplete="off" placeholder="请手动填写企业名字" />
+            <small>只允许手动填写；网页抓取、邮件和刷新不会覆盖。</small>
+          </label>
+          <label>
+            <span>工作地点 <b>*</b></span>
+            <input id="location" name="location" required maxlength="60" placeholder="例如：上海 / 可远程" />
+          </label>
+          <label>
+            <span>投递日期 <b>*</b></span>
+            <input id="appliedDate" name="appliedDate" type="date" required />
+          </label>
+          <label>
+            <span>当前进度 <b>*</b></span>
+            <select id="progress" name="progress" required>
+              <option>已投递</option>
+              <option>简历筛选</option>
+              <option>测评</option>
+              <option>笔试</option>
+              <option>一面</option>
+              <option>二面</option>
+              <option>HR面</option>
+              <option>Offer</option>
+              <option>未通过</option>
+              <option>已撤回</option>
+            </select>
+          </label>
+          <label>
+            <span>测试／面试截止时间</span>
+            <input id="deadline" name="deadline" type="datetime-local" />
+            <small>没有明确时间时可以暂时留空。</small>
+          </label>
+          <label class="full-width">
+            <span>具体查询网站 <b>*</b></span>
+            <input
+              id="queryUrl"
+              name="queryUrl"
+              type="url"
+              required
+              placeholder="https://招聘官网/个人中心"
+            />
+            <small>建议填写能直接打开申请记录或个人中心的页面。</small>
+          </label>
+        </div>
+
+        <div class="dialog-actions">
+          <button class="button ghost danger" id="deleteButton" type="button" hidden>删除记录</button>
+          <span class="dialog-spacer"></span>
+          <button class="button secondary" id="cancelButton" type="button">取消</button>
+          <button class="button primary" type="submit">保存记录</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="small-dialog" id="infoDialog" aria-labelledby="infoDialogTitle">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">下一阶段</p>
+          <h2 id="infoDialogTitle">功能正在接入</h2>
+        </div>
+        <button class="icon-button" id="closeInfoDialog" type="button" aria-label="关闭">×</button>
+      </div>
+      <p id="infoDialogText"></p>
+      <div class="dialog-actions">
+        <span class="dialog-spacer"></span>
+        <button class="button primary" id="confirmInfoDialog" type="button">知道了</button>
+      </div>
+    </dialog>
+
+    <dialog class="profile-dialog" id="profileDialog" aria-labelledby="profileDialogTitle">
+      <form id="profileForm">
+        <div class="dialog-head">
+          <div>
+            <p class="eyebrow">首次设置</p>
+            <h2 id="profileDialogTitle">欢迎使用秋招进度台</h2>
+          </div>
+          <button class="icon-button" id="closeProfileDialog" type="button" aria-label="关闭" hidden>×</button>
+        </div>
+        <p class="profile-intro">填写一次基本信息，方便统一记录你的秋招资料。邮箱可以登记 1–5 个；登录网页版邮箱后，可抓取页面中已加载的秋招邮件。</p>
+        <div class="form-grid profile-fields">
+          <label>
+            <span>你的姓名 <b>*</b></span>
+            <input id="profileName" name="profileName" required maxlength="30" autocomplete="name" placeholder="请输入姓名" />
+          </label>
+          <label>
+            <span>手机号码 <b>*</b></span>
+            <input id="profilePhone" name="profilePhone" required maxlength="24" autocomplete="tel" inputmode="tel" pattern="\+?[0-9][0-9\s\x2D]{6,23}" placeholder="例如：13800138000" />
+          </label>
+          <div class="full-width email-section">
+            <div class="email-section-head">
+              <span>招聘通知邮箱 <b>*</b></span>
+              <button id="addEmailButton" type="button">＋ 添加邮箱</button>
+            </div>
+            <div class="email-fields" id="emailFields"></div>
+            <small>系统会根据邮箱后缀识别类型，并通过岗位名称匹配招聘邮件；不会获取邮箱密码。</small>
+          </div>
+        </div>
+        <p class="profile-privacy">这些信息当前只保存在你的 Edge 扩展本地存储中。</p>
+        <div class="dialog-actions">
+          <span class="dialog-spacer"></span>
+          <button class="button primary" type="submit">保存并进入面板</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="alerts-dialog" id="alertsDialog" aria-labelledby="alertsDialogTitle">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">申请动态</p>
+          <h2 id="alertsDialogTitle">你有新的秋招进度</h2>
+        </div>
+        <button class="icon-button" id="closeAlertsDialog" type="button" aria-label="稍后查看">×</button>
+      </div>
+      <div class="alerts-list" id="alertsList"></div>
+      <div class="dialog-actions">
+        <button class="button secondary" id="remindLaterButton" type="button">稍后提醒</button>
+        <span class="dialog-spacer"></span>
+        <button class="button primary" id="markAlertsReadButton" type="button">我知道了，标为已读</button>
+      </div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./extractor.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

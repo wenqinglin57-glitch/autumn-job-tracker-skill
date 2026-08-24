@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>求职工作台</title>
+    <link rel="stylesheet" href="./popup.css" />
+  </head>
+  <body>
+    <header>
+      <span class="logo">职</span>
+      <div>
+        <strong>求职工作台</strong>
+        <small>Edge 自动查询助手</small>
+      </div>
+      <span class="live" title="扩展已运行"></span>
+    </header>
+
+    <main>
+      <section class="schedule-card">
+        <div>
+          <span class="label">自动检查</span>
+          <strong>每天 12:00 · 18:00</strong>
+        </div>
+        <span class="switch" aria-label="自动检查已启用"><i></i></span>
+      </section>
+
+      <section class="page-card">
+        <span class="label">当前页面</span>
+        <div class="page-context">
+          <span class="context-icon" id="contextIcon">⌕</span>
+          <div>
+            <strong id="contextTitle">正在识别…</strong>
+            <small id="contextText">请稍候</small>
+          </div>
+        </div>
+        <button class="primary" id="captureButton" type="button">抓取当前页面</button>
+      </section>
+
+      <section class="summary">
+        <div><strong id="recordCount">0</strong><span>投递记录</span></div>
+        <div><strong id="mailCount">0</strong><span>已登记邮箱</span></div>
+        <div><strong id="signalCount">0</strong><span>待确认通知</span></div>
+      </section>
+
+      <section class="updates-card" id="updatesCard" hidden>
+        <div class="updates-head">
+          <span class="label">新增状态</span>
+          <button id="markPopupAlertsRead" type="button">全部已读</button>
+        </div>
+        <div class="popup-updates" id="popupUpdates"></div>
+      </section>
+
+      <section class="last-check">
+        <span class="label">最近检查</span>
+        <p id="lastCheckText">尚未执行自动检查</p>
+      </section>
+
+      <div class="actions">
+        <button class="secondary" id="runNowButton" type="button">立即检查一次</button>
+        <button class="dashboard-button" id="openDashboardButton" type="button">打开完整面板 <span>↗</span></button>
+      </div>
+    </main>
+
+    <div class="toast" id="popupToast" role="status"></div>
+    <script src="./popup.js"></script>
+  </body>
+</html>
